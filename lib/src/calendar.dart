@@ -763,16 +763,19 @@ class _TableCalendarState extends State<TableCalendar>
       return widget.builders.dayBuilder(
           context, date, widget.calendarController.visibleEvents[eventKey]);
     } else {
-      return _CellWidget(
-        text: '${date.day}',
-        isUnavailable: tIsUnavailable,
-        isSelected: tIsSelected,
-        isToday: tIsToday,
-        isWeekend: tIsWeekend,
-        isOutsideMonth: tIsOutside,
-        isHoliday: tIsHoliday,
-        isEventDay: tIsEventDay,
-        calendarStyle: widget.calendarStyle,
+      return Semantics(
+          label: date.toIso8601String(),
+          child: _CellWidget(
+          text: '${date.day}',
+          isUnavailable: tIsUnavailable,
+          isSelected: tIsSelected,
+          isToday: tIsToday,
+          isWeekend: tIsWeekend,
+          isOutsideMonth: tIsOutside,
+          isHoliday: tIsHoliday,
+          isEventDay: tIsEventDay,
+          calendarStyle: widget.calendarStyle,
+        ),
       );
     }
   }
