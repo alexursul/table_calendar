@@ -245,14 +245,11 @@ class _CalendarPageState<T> extends State<_CalendarPage<T>> {
     }
 
     return GestureDetector(
+      key: Key('calendarDate${date.day}.${date.month}.${date.year}')
       behavior: widget.dayHitTestBehavior,
       onTap: () => _isDayUnavailable(date) ? _onUnavailableDaySelected() : _selectDay(date),
       onLongPress: () => _isDayUnavailable(date) ? _onUnavailableDayLongPressed() : _onDayLongPressed(date),
-      child: Semantics(
-        label: "date ${date.day}.${date.month}.${date.year}",
-        enabled: true,
-        child: content,
-      ),
+      child: content,
     );
   }
 
