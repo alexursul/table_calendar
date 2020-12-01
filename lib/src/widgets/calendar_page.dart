@@ -245,7 +245,7 @@ class _CalendarPageState<T> extends State<_CalendarPage<T>> {
     }
 
     return Semantics(
-      label: date.toIso8601String(),
+      label: "${date.day}.${date.month}.${date.year}",
       child: GestureDetector(
         behavior: widget.dayHitTestBehavior,
         onTap: () => _isDayUnavailable(date) ? _onUnavailableDaySelected() : _selectDay(date),
