@@ -244,11 +244,14 @@ class _CalendarPageState<T> extends State<_CalendarPage<T>> {
       }
     }
 
-    return GestureDetector(
-      behavior: widget.dayHitTestBehavior,
-      onTap: () => _isDayUnavailable(date) ? _onUnavailableDaySelected() : _selectDay(date),
-      onLongPress: () => _isDayUnavailable(date) ? _onUnavailableDayLongPressed() : _onDayLongPressed(date),
-      child: content,
+    return Semantics(
+      label: date.toIso8601String(),
+      child: GestureDetector(
+        behavior: widget.dayHitTestBehavior,
+        onTap: () => _isDayUnavailable(date) ? _onUnavailableDaySelected() : _selectDay(date),
+        onLongPress: () => _isDayUnavailable(date) ? _onUnavailableDayLongPressed() : _onDayLongPressed(date),
+        child: content,
+      )
     );
   }
 
