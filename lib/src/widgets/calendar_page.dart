@@ -71,12 +71,13 @@ class _CalendarPageState<T> extends State<_CalendarPage<T>> {
     _selectedDayCallback(day);
 
     if (widget.calendarController.calendarFormat == CalendarFormat.month) {
-      final int previousMonth = widget.calendarController._focusedDay.value.month;
+      final int previousMonth = widget.calendarController._focusedDay.value.year * 12 +
+          widget.calendarController._focusedDay.value.month;
 
-      if (day.month < previousMonth) {
+      if (day.month + day.year * 12 < previousMonth) {
         widget.calendarController.previousPage();
         return;
-      } else if (day.month > previousMonth) {
+      } else if (day.month + day.year * 12 > previousMonth) {
         widget.calendarController.nextPage();
         return;
       }
@@ -113,8 +114,10 @@ class _CalendarPageState<T> extends State<_CalendarPage<T>> {
   }
 
   bool _isDayUnavailable(DateTime day) {
-    return (widget.startDay != null && day.isBefore(widget.calendarController._normalizeDate(widget.startDay))) ||
-        (widget.endDay != null && day.isAfter(widget.calendarController._normalizeDate(widget.endDay))) ||
+    return (widget.startDay != null &&
+        day.isBefore(widget.calendarController._normalizeDate(widget.startDay))) ||
+        (widget.endDay != null &&
+            day.isAfter(widget.calendarController._normalizeDate(widget.endDay))) ||
         (!_isDayEnabled(day));
   }
 
@@ -123,11 +126,13 @@ class _CalendarPageState<T> extends State<_CalendarPage<T>> {
   }
 
   DateTime _getEventKey(DateTime day) {
-    return widget.events.keys.firstWhere((it) => widget.calendarController.isSameDay(it, day), orElse: () => null);
+    return widget.events.keys.firstWhere((it) => widget.calendarController.isSameDay(it, day),
+        orElse: () => null);
   }
 
   DateTime _getHolidayKey(DateTime day) {
-    return widget.holidays.keys.firstWhere((it) => widget.calendarController.isSameDay(it, day), orElse: () => null);
+    return widget.holidays.keys.firstWhere((it) => widget.calendarController.isSameDay(it, day),
+        orElse: () => null);
   }
 
   @override
@@ -168,7 +173,8 @@ class _CalendarPageState<T> extends State<_CalendarPage<T>> {
         return Center(
           child: Text(
             weekdayString,
-            style: isWeekend ? widget.daysOfWeekStyle.weekendStyle : widget.daysOfWeekStyle.weekdayStyle,
+            style: isWeekend ? widget.daysOfWeekStyle.weekendStyle : widget.daysOfWeekStyle
+                .weekdayStyle,
           ),
         );
       }).toList(),
@@ -178,7 +184,7 @@ class _CalendarPageState<T> extends State<_CalendarPage<T>> {
   TableRow _buildTableRow(List<DateTime> days, DateTime focusedDay) {
     return TableRow(
       children: days.map(
-        (date) {
+            (date) {
           return SizedBox(
             height: widget.rowHeight,
             child: _buildCell(date, focusedDay),
@@ -248,7 +254,10 @@ class _CalendarPageState<T> extends State<_CalendarPage<T>> {
       key: Key('calendarDate${date.day}.${date.month}.${date.year}'),
       behavior: widget.dayHitTestBehavior,
       onTap: () => _isDayUnavailable(date) ? _onUnavailableDaySelected() : _selectDay(date),
-      onLongPress: () => _isDayUnavailable(date) ? _onUnavailableDayLongPressed() : _onDayLongPressed(date),
+      onLongPress: () =>
+      _isDayUnavailable(date)
+          ? _onUnavailableDayLongPressed()
+          : _onDayLongPressed(date),
       child: content,
     );
   }
@@ -266,12 +275,15 @@ class _CalendarPageState<T> extends State<_CalendarPage<T>> {
     final isUnavailable = widget.builders.unavailableDayBuilder != null && tIsUnavailable;
     final isSelected = widget.builders.selectedDayBuilder != null && tIsSelected;
     final isToday = widget.builders.todayDayBuilder != null && tIsToday;
-    final isOutsideHoliday = widget.builders.outsideHolidayDayBuilder != null && tIsOutside && tIsHoliday;
+    final isOutsideHoliday = widget.builders.outsideHolidayDayBuilder != null && tIsOutside &&
+        tIsHoliday;
     final isHoliday = widget.builders.holidayDayBuilder != null && !tIsOutside && tIsHoliday;
     final isOutsideWeekend =
         widget.builders.outsideWeekendDayBuilder != null && tIsOutside && tIsWeekend && !tIsHoliday;
-    final isOutside = widget.builders.outsideDayBuilder != null && tIsOutside && !tIsWeekend && !tIsHoliday;
-    final isWeekend = widget.builders.weekendDayBuilder != null && !tIsOutside && tIsWeekend && !tIsHoliday;
+    final isOutside = widget.builders.outsideDayBuilder != null && tIsOutside && !tIsWeekend &&
+        !tIsHoliday;
+    final isWeekend = widget.builders.weekendDayBuilder != null && !tIsOutside && tIsWeekend &&
+        !tIsHoliday;
 
     if (isUnavailable) {
       return widget.builders.unavailableDayBuilder(context, date, widget.events[eventKey]);
