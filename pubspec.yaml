@@ -10,7 +10,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
   intl: ^0.17.0-nullsafety.2
   simple_gesture_detector: ^0.1.3
 
